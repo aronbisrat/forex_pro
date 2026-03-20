@@ -22,11 +22,11 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          flutter-version: '3.41.4'
 
       - name: Build APK
         run: |
-          flet build apk
+          flet build apk -y
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
