@@ -31,4 +31,4 @@ jobs:
 
       - name: Build APK
         run: |
-          flet build apk -y --no-version-check
+          flet build apk
