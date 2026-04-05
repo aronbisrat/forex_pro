@@ -2,4 +2,5 @@ flet
 yfinance
 pandas
 joblib
-requests
+scikit-learn
+numpy
