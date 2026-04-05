@@ -1,33 +1,39 @@
 name: Build Android APK
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+on: [push]
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true # Clears the deprecation warning
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - name: Setup Python
-        uses: actions/setup-python@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
-      - name: Install Dependencies
+      - name: Install System Dependencies
         run: |
-          pip install flet yfinance pandas joblib scikit-learn numpy
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev
+      - name: Install Python Libraries
+        run: |
+          pip install flet yfinance pandas joblib requests
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.4'
 
       - name: Build APK
         run: |
-          # The --verbose flag will help us see exactly where it fails if it does
-          flet build apk --verbose
-
-      - name: Upload Artifact
+          # The assets folder is automatically included if it's in the root
+          flet build apk
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Ethio-Forex-AI-Mobile
-          path: build/apk/*.apk
+          name: Ethio-Forex-App
+          path: "**/*.apk"
+          if-no-files-found: error
