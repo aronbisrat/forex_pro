@@ -1,6 +1,4 @@
 flet
 yfinance
 pandas
-joblib
-scikit-learn
 numpy

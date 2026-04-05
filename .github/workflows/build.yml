@@ -1,39 +1,37 @@
 name: Build Android APK
-on: [push]
-
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v6
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.12'
+          python-version: '3.11'
 
-      - name: Install System Dependencies
+      - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y libgtk-3-dev
-      - name: Install Python Libraries
-        run: |
-          pip install flet yfinance pandas joblib requests
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.4'
+          # We only install the lightweight essentials now
+          pip install flet yfinance pandas numpy
+
+      - name: Accept Android Licenses
+        run: yes | sdkmanager --licenses || true
 
       - name: Build APK
         run: |
-          # The assets folder is automatically included if it's in the root
-          flet build apk
-      - name: Upload APK
+          # This will now package your _logic.py files automatically
+          flet build apk --verbose
+
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: Ethio-Forex-App
-          path: "**/*.apk"
-          if-no-files-found: error
+          name: Ethio-Forex-AI-Mobile
+          path: build/apk/*.apk
