@@ -32,8 +32,8 @@ jobs:
 
       - name: Build APK
         run: |
-          # We use --yes as a backup to ensure NO prompts happen
-          flet build apk --yes --verbose
+          # Added --android-permissions to allow the app to fetch live rates
+          flet build apk --yes --verbose --android-permissions "android.permission.INTERNET"
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
