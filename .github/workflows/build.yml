@@ -32,9 +32,9 @@ jobs:
 
       - name: Build APK
         run: |
-          # Use the exact flag name allowed by flet build apk: --android-permissions
-          # We pass the standard Android intent for Internet access
-          flet build apk --yes --verbose --android-permissions android.permission.INTERNET
+          # Removing the --android-permissions flag as it's causing exit errors
+          # Flet 0.21.0+ includes internet access by default for APKs
+          flet build apk --yes --verbose
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
