@@ -17,6 +17,7 @@ jobs:
         with:
           python-version: '3.11'
 
+      # 1. Pre-install Flutter so Flet doesn't have to ask
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -31,8 +32,9 @@ jobs:
 
       - name: Build APK
         run: |
-          # Simplified permission flag - some Flet versions prefer this format
-          flet build apk --yes --verbose --permissions internet
+          # Use the exact flag name allowed by flet build apk: --android-permissions
+          # We pass the standard Android intent for Internet access
+          flet build apk --yes --verbose --android-permissions android.permission.INTERNET
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
